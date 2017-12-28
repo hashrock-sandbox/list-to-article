@@ -4,7 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "poi"
+    "dev": "poi",
+    "build": "poi build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "poi": "^9.6.8",
