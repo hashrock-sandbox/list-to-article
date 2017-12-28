@@ -1,10 +1,22 @@
 <template>
   <div>
-    <h1>Hello!</h1>
-    <button @click="insertBefore('です')">です。</button>
     <codemirror ref="myEditor" v-model="code"></codemirror>
+    <button @click="insertAfter('')">文頭削除</button>
+    <button @click="insertAfter('です。')">です。</button>
+    <button @click="insertAfter('してしまいます。')">してしまいます。</button>
+    <button @click="insertAfter('でしょう。')">でしょう。</button>
+    <button @click="insertAfter('ということです。')">ということです。</button>
+    <button @click="insertAfter('と考えられます。')">と考えられます。</button>
+    <button @click="insertAfter('ということも事実です。')">ということも事実です。</button>
+    <button @click="insertAfter('ということがよくあります。')">ということがよくあります。</button>
+    <button @click="insertAfter('について')">について</button>
   </div>
 </template>
+<style>
+  body{
+    background: #EEE;
+  }
+</style>
 <script>
   import { codemirror } from 'vue-codemirror-lite'
 
@@ -14,7 +26,7 @@
     },
     data() {
       return {
-        code: 'const str = "hello world"'
+        code: '- テスト\n- なのかなあ\n  - まあいいか\n'
       }
     },
     computed: {
@@ -24,39 +36,41 @@
       }
     },
     methods: {
-      insertBefore() {
-        //this.editor.replaceRange("foo", {ch: Infinity});  
-        var doc = this.editor
-        var cursor = doc.getCursor(); // gets the line number in the cursor position
-        var line = doc.getLine(cursor.line); // get the line contents
-        var pos = {
-          line: cursor.line,
-          ch: line.length
-        }
-        var from = {
+      removeListHeader(){
+        const cursor = this.editor.getCursor();
+        const line = this.editor.getLine(cursor.line);
+        const from = {
           line: cursor.line,
           ch: 0
         }
-        var to = {
+        const to = {
           line: cursor.line,
           ch: line.length
         }
-        doc.replaceRange('' + "data" + '', from, to); // adds a new line
-        doc.setSelection({
+        const selected = this.editor.getRange(from, to);
+        const replaced = selected.replace(/^[ -]*/, "")
+        this.editor.replaceRange(replaced, from, to); // adds a new line
+      },
+      insertAfter(text){
+        this.removeListHeader()
+        const cursor = this.editor.getCursor();
+        const line = this.editor.getLine(cursor.line);
+        const from = {
+          line: cursor.line,
+          ch: line.length
+        }
+        const to = {
+          line: cursor.line,
+          ch: line.length
+        }
+        this.editor.replaceRange(text, from, to); // adds a new line
+        this.editor.setSelection({
           line: cursor.line + 1,
           ch: 0
         })
         this.editor.focus()
-        
-        /*
-        this.editor.replaceRange("foo\n", {line: Infinity});      
-        
-        */
-        //console.log(this.editor.getSelection())
-        /*
-        CodeMirror.Pos(editor.getCursor().line,editor.getCursor().ch)
-        console.log(this.editor.getCursor().line)
-        */
+      },
+      insertBefore() {
       }
     },
     mounted() {
