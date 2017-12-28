@@ -1,0 +1,13 @@
+{
+  "name": "list-to-article",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "poi"
+  },
+  "dependencies": {
+    "poi": "^9.6.8",
+    "vue-codemirror-lite": "^1.0.3"
+  }
+}
